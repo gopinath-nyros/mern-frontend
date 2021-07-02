@@ -27,3 +27,7 @@ body {
   opacity: 0;
   transition: all 200ms;
 }
+
+.loadcenter {
+  text-align: center !important;
+}

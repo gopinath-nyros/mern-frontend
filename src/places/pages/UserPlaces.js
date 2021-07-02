@@ -33,11 +33,7 @@ const UserPlaces = () => {
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      {isLoading && (
-        <div className='center'>
-          <LoadingSpinner />
-        </div>
-      )}
+      {isLoading && <LoadingSpinner asOverlay />}
       {!isLoading && loadedPlaces && (
         <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />
       )}

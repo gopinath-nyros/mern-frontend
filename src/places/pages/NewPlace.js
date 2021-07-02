@@ -59,8 +59,7 @@ const NewPlace = () => {
       await sendRequest(url, "POST", formData, {
         Authorization: "Bearer " + authCtx.token,
       });
-      // console.log(responseData);
-      // console.log(responseData);
+
       // Redirect here on success
       history.push("/");
     } catch (error) {}
