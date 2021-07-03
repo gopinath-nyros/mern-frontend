@@ -14,7 +14,8 @@ const PlaceList = (props) => {
     return (
       <div className='place-list center'>
         <Card>
-          <h2>No places found. Want to create one?</h2>
+          {loggedInUser && <h2>No places found. Want to create one?</h2>}
+          {!loggedInUser && <h2>No places found for this user</h2>}
           <div className='btn'>
             {loggedInUser && <Button to='/places/new'>share place</Button>}
           </div>
