@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "../../shared/components/FormElements/Button";
 
 import Card from "../../shared/components/UIElements/Card";
 import PlaceItem from "./PlaceItem";
+import { AuthContext } from "../../shared/context/auth-context";
 import "./PlaceList.css";
 
 const PlaceList = (props) => {
+  const authCtx = useContext(AuthContext);
+  const loggedInUser = authCtx.userId;
   console.log(props);
   if (props.items.length === 0) {
     return (
@@ -13,7 +16,7 @@ const PlaceList = (props) => {
         <Card>
           <h2>No places found. Want to create one?</h2>
           <div className='btn'>
-            <Button to='/places/new'>share place</Button>
+            {loggedInUser && <Button to='/places/new'>share place</Button>}
           </div>
         </Card>
       </div>
