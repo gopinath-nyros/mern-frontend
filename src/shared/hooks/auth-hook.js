@@ -5,10 +5,13 @@ export const useAuth = () => {
   const [token, setToken] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
   const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState(null);
 
-  const login = useCallback((uid, token, expirationDate) => {
+  const login = useCallback((uid, name, token, expirationDate) => {
+    console.log(`THE USERNAME IN LOGGED IN IS ${name}`);
     setToken(token);
     setUserId(uid);
+    setUsername(name);
     // create a new date based on new date and add 1hour to it
     // otherwise if already created then we get it from useEffect call using expirationDate
     const tokenExpirationDate =
@@ -18,7 +21,8 @@ export const useAuth = () => {
     localStorage.setItem(
       "userData",
       JSON.stringify({
-        userID: uid,
+        userId: uid,
+        username: name,
         token: token,
         expiration: tokenExpirationDate.toISOString(),
       })
@@ -28,6 +32,7 @@ export const useAuth = () => {
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
+    setUsername(null);
     setTokenExpirationDate(null);
     localStorage.removeItem("userData");
   }, []);
@@ -53,11 +58,12 @@ export const useAuth = () => {
     ) {
       login(
         storedData.userId,
+        storedData.username,
         storedData.token,
         new Date(storedData.expiration)
       );
     }
   }, [login]);
 
-  return { token, login, logout, userId };
+  return { token, login, logout, userId, username };
 };

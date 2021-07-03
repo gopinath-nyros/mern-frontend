@@ -19,7 +19,7 @@ const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
 const Auth = React.lazy(() => import("./users/pages/Auth"));
 
 const App = () => {
-  const { token, login, logout, userId } = useAuth();
+  const { token, login, logout, userId, username } = useAuth();
   let routes;
 
   if (token) {
@@ -63,6 +63,7 @@ const App = () => {
         isLoggedIn: !!token,
         token: token,
         userId: userId,
+        username: username,
         login: login,
         logout: logout,
       }}
@@ -70,7 +71,6 @@ const App = () => {
       <Router>
         <MainNavigation />
         <main>
-          {" "}
           <Suspense
             fallback={
               <div className='center'>
@@ -79,7 +79,7 @@ const App = () => {
             }
           >
             {routes}
-          </Suspense>{" "}
+          </Suspense>
         </main>
       </Router>
     </AuthContext.Provider>

@@ -83,7 +83,12 @@ const Auth = () => {
 
         console.log(responseData);
         console.log(`the user id is ${responseData.userId}`);
-        authCtx.login(responseData.userId, responseData.token);
+        console.log(`the user name is ${responseData.username}`);
+        authCtx.login(
+          responseData.userId,
+          responseData.username,
+          responseData.token
+        );
       } catch (error) {}
     } else {
       try {
@@ -95,7 +100,11 @@ const Auth = () => {
         const url = `${process.env.REACT_APP_BACKEND_URL}/users/signup`;
         const responseData = await sendRequest(url, "POST", formData);
         console.log(responseData);
-        authCtx.login(responseData.userId, responseData.token);
+        authCtx.login(
+          responseData.userId,
+          responseData.username,
+          responseData.token
+        );
       } catch (error) {}
     }
   };
@@ -156,9 +165,11 @@ const Auth = () => {
             {isLoginMode ? "Login" : "Sign-up"}
           </Button>
         </form>
-        <Button inverse onClick={switchModeHandler}>
-          Switch to {isLoginMode ? "Sign-up" : "Login"}
-        </Button>
+        <div className='mgb'>
+          <Button inverse onClick={switchModeHandler}>
+            Switch to {isLoginMode ? "Sign-up" : "Login"}
+          </Button>
+        </div>
       </Card>
     </Fragment>
   );

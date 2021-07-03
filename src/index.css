@@ -31,3 +31,12 @@ body {
 .loadcenter {
   text-align: center !important;
 }
+
+.username {
+  text-align: center;
+  font-weight: 500;
+}
+
+.mgb {
+  margin-bottom: 30px;
+}

@@ -45,17 +45,17 @@ const NewPlace = () => {
 
   const formSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log("submitting...");
-    console.log(formState.inputs);
+    // console.log("submitting...");
+    // console.log(formState.inputs);
     try {
       const formData = new FormData();
       formData.append("title", formState.inputs.title.value);
       formData.append("description", formState.inputs.description.value);
       formData.append("address", formState.inputs.address.value);
       formData.append("image", formState.inputs.image.value);
-      console.log(authCtx.token);
+      // console.log(authCtx.token);
       const url = `${process.env.REACT_APP_BACKEND_URL}/places`;
-      console.log("the url is..." + url);
+      // console.log("the url is..." + url);
       await sendRequest(url, "POST", formData, {
         Authorization: "Bearer " + authCtx.token,
       });
