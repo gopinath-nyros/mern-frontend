@@ -46,10 +46,30 @@ const UserPlaces = () => {
     );
   };
 
+  if (noPlaces && !isLoading) {
+    return (
+      <div className='place-list center'>
+        <Card>
+          {loggedInUser === noPlaces.userid && (
+            <h2>No places found. Want to create one?</h2>
+          )}
+          {loggedInUser !== noPlaces.userid && !loadedPlaces && (
+            <h2>No places found for this user</h2>
+          )}
+          <div className='btn'>
+            {loggedInUser === noPlaces.userid && (
+              <Button to='/places/new'>create place</Button>
+            )}
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      {noPlaces && !isLoading && (
+      {/* {noPlaces && !isLoading && (
         <div className='place-list center'>
           <Card>
             {loggedInUser === noPlaces.userid && (
@@ -65,7 +85,7 @@ const UserPlaces = () => {
             </div>
           </Card>
         </div>
-      )}
+      )} */}
       {isLoading && <LoadingSpinner asOverlay />}
       {!isLoading && loadedPlaces && !error && (
         <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />
