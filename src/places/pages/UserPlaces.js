@@ -7,28 +7,30 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Card from "../../shared/components/UIElements/Card";
 import Button from "../../shared/components/FormElements/Button";
 import { AuthContext } from "../../shared/context/auth-context";
+
 const UserPlaces = () => {
   const authCtx = useContext(AuthContext);
   const loggedInUser = authCtx.userId;
-  console.log(authCtx.userId);
+  // console.log(authCtx.userId);
   const [loadedPlaces, setLoadedPlaces] = useState();
   const [noPlaces, setNoPlaces] = useState();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  // const { isLoading,  sendRequest } = useHttpClient();
   const params = useParams();
   const id = params.userId;
-  console.log(id);
+  // console.log(id);
 
   useEffect(() => {
     const getPlaces = async () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}`;
-        console.log(url);
+        // console.log(url);
         const responseData = await sendRequest(url);
         if (!responseData.message) {
           setLoadedPlaces(responseData.places);
+          setNoPlaces();
         } else {
           setNoPlaces(responseData);
+          setLoadedPlaces();
         }
         console.log(responseData);
       } catch (error) {
@@ -39,14 +41,17 @@ const UserPlaces = () => {
   }, [sendRequest, id]);
 
   const placeDeletedHandler = (deletedPlaceId) => {
-    console.log("calling........");
-    console.log(`deleted place id is ${deletedPlaceId}`);
+    // console.log("calling........");
+    // console.log(`deleted place id is ${deletedPlaceId}`);
     setLoadedPlaces((prevPlaces) =>
       prevPlaces.filter((place) => place.id !== deletedPlaceId)
     );
   };
 
-  if (noPlaces && !isLoading) {
+  if (!isLoading && noPlaces) {
+    console.log(!isLoading);
+    console.log(!!noPlaces);
+    console.log("TRIGGERED");
     return (
       <div className='place-list center'>
         <Card>
