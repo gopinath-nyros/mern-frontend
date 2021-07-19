@@ -24,12 +24,21 @@ const Users = () => {
     getAllUsers();
   }, [sendRequest]);
 
+  useEffect(() => {
+    document.title = "Places App";
+  });
+
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       {authCtx.username && (
-        <h1 className='username'>welcome back {authCtx.username}</h1>
+        <h1 className='username'>
+          {`Welcome Back ${
+            authCtx.username[0].toUpperCase() +
+            authCtx.username.slice(1).toLowerCase()
+          }`}
+        </h1>
       )}
       {!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
     </Fragment>

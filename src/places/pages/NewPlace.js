@@ -1,4 +1,4 @@
-import React, { useContext, Fragment } from "react";
+import React, { useContext, Fragment, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
@@ -6,6 +6,7 @@ import Button from "../../shared/components/FormElements/Button";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
+  VALIDATOR_MAXLENGTH,
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -65,6 +66,10 @@ const NewPlace = () => {
     } catch (error) {}
   };
 
+  useEffect(() => {
+    document.title = "New Place";
+  });
+
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -76,8 +81,14 @@ const NewPlace = () => {
           type='text'
           placeholder='enter place'
           label='Title'
-          validators={[VALIDATOR_REQUIRE()]}
-          errorText='please enter a title..'
+          validators={[
+            VALIDATOR_REQUIRE(),
+            VALIDATOR_MINLENGTH(7),
+            VALIDATOR_MAXLENGTH(12),
+          ]}
+          errorText='please enter a title'
+          minLengthError='title should contain atleast 7 charecters'
+          maxLengthError='title exceeded the limit of 12 charecters'
           onInput={inputHandler}
         />
         <ImageUpload
@@ -92,8 +103,14 @@ const NewPlace = () => {
           type='text'
           placeholder='enter place'
           label='Description'
-          validators={[VALIDATOR_MINLENGTH(5)]}
-          errorText='please enter a description..'
+          validators={[
+            VALIDATOR_REQUIRE(),
+            VALIDATOR_MINLENGTH(7),
+            VALIDATOR_MAXLENGTH(150),
+          ]}
+          errorText='please enter a description'
+          minLengthError='description should contain atleast 7 charecters'
+          maxLengthError='description exceeded the limit of 150 charecters'
           onInput={inputHandler}
         />
         <Input
@@ -102,10 +119,18 @@ const NewPlace = () => {
           type='text'
           placeholder='enter address'
           label='Address'
-          validators={[VALIDATOR_REQUIRE(5)]}
+          list='address'
+          validators={[
+            VALIDATOR_REQUIRE(),
+            VALIDATOR_MINLENGTH(7),
+            VALIDATOR_MAXLENGTH(60),
+          ]}
           errorText='please enter address'
+          minLengthError='address should contain atleast 7 charecters'
+          maxLengthError='address exceeded the limit of 60 charecters'
           onInput={inputHandler}
         />
+
         <Button type='submit' disabled={!formState.isValid}>
           ADD PLACE
         </Button>

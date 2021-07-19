@@ -8,11 +8,15 @@ import Card from "../../shared/components/UIElements/Card";
 import Button from "../../shared/components/FormElements/Button";
 import { AuthContext } from "../../shared/context/auth-context";
 
+import InfiniteScroll from "react-infinite-scroll-component";
+
 const UserPlaces = () => {
   const authCtx = useContext(AuthContext);
   const loggedInUser = authCtx.userId;
   // console.log(authCtx.userId);
-  const [loadedPlaces, setLoadedPlaces] = useState();
+  const [loadedPlaces, setLoadedPlaces] = useState([]);
+  const [page, setPage] = useState(1);
+  // const [size, setSize] = useState();
   const [noPlaces, setNoPlaces] = useState();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const params = useParams();
@@ -20,9 +24,13 @@ const UserPlaces = () => {
   // console.log(id);
 
   useEffect(() => {
+    document.title = "Places App";
+  });
+
+  useEffect(() => {
     const getPlaces = async () => {
       try {
-        const url = `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}`;
+        const url = `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}?page=${page}&size=3`;
         // console.log(url);
         const responseData = await sendRequest(url);
         if (!responseData.message) {
@@ -32,13 +40,14 @@ const UserPlaces = () => {
           setNoPlaces(responseData);
           setLoadedPlaces();
         }
-        console.log(responseData);
+        // console.log(responseData);
       } catch (error) {
         console.log(error);
       }
     };
+
     getPlaces();
-  }, [sendRequest, id]);
+  }, [sendRequest, id, page]);
 
   const placeDeletedHandler = (deletedPlaceId) => {
     // console.log("calling........");
@@ -49,9 +58,9 @@ const UserPlaces = () => {
   };
 
   if (!isLoading && noPlaces) {
-    console.log(!isLoading);
-    console.log(!!noPlaces);
-    console.log("TRIGGERED");
+    // console.log(!isLoading);
+    // console.log(!!noPlaces);
+    // console.log("TRIGGERED");
     return (
       <div className='place-list center'>
         <Card>
@@ -71,6 +80,43 @@ const UserPlaces = () => {
     );
   }
 
+  const fetchPlaces = async () => {
+    setPage(page + 1);
+    try {
+      const url = `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}?page=${page}&size=3`;
+      const responseData = await sendRequest(url);
+      if (!responseData.message) {
+        // setLoadedPlaces(loadedPlaces.concat(responseData.places));
+        // setLoadedPlaces([...loadedPlaces, responseData.places]);
+        setLoadedPlaces((loadedPlaces) => [
+          ...loadedPlaces,
+          // [...responseData.places],
+          loadedPlaces.concat(responseData.places),
+        ]);
+        // setLoadedPlaces((prevState) => {
+        //   return {
+        //     ...prevState,
+        //     places: prevState.concat(responseData.places),
+        //   };
+        // });
+        // console.log(responseData.places);
+        setNoPlaces();
+      } else {
+        setNoPlaces(responseData);
+        setLoadedPlaces();
+      }
+      // console.log(responseData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("start");
+  console.log(loadedPlaces);
+  console.log(
+    `the length of the array is ${loadedPlaces.length} in fetch places`
+  );
+  console.log("end");
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -93,7 +139,14 @@ const UserPlaces = () => {
       )} */}
       {isLoading && <LoadingSpinner asOverlay />}
       {!isLoading && loadedPlaces && !error && (
-        <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />
+        <InfiniteScroll
+          dataLength={loadedPlaces.length}
+          next={fetchPlaces}
+          hasMore={true}
+          loader={<h3>Loading...</h3>}
+        >
+          <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />
+        </InfiniteScroll>
       )}
     </Fragment>
   );

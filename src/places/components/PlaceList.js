@@ -9,7 +9,7 @@ import "./PlaceList.css";
 const PlaceList = (props) => {
   const authCtx = useContext(AuthContext);
   const loggedInUser = authCtx.userId;
-  console.log(props);
+  // console.log(props);
   if (props.items.length === 0) {
     return (
       <div className='place-list center'>
@@ -26,9 +26,9 @@ const PlaceList = (props) => {
 
   return (
     <ul className='place-list'>
-      {props.items.map((place) => (
+      {props.items.map((place, index) => (
         <PlaceItem
-          key={place.id}
+          key={index}
           id={place.id}
           image={place.image}
           title={place.title}

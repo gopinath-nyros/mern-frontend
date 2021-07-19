@@ -1,4 +1,4 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useState, useContext, Fragment, useEffect } from "react";
 import Input from "../../shared/components/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -109,6 +109,10 @@ const Auth = () => {
     }
   };
 
+  useEffect(() => {
+    document.title = "Login";
+  });
+
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -124,8 +128,14 @@ const Auth = () => {
               type='text'
               label='Your Name'
               placeholder='enter your name'
-              validators={[VALIDATOR_REQUIRE()]}
+              validators={[
+                VALIDATOR_REQUIRE(),
+                VALIDATOR_MINLENGTH(7),
+                VALIDATOR_MAXLENGTH(20),
+              ]}
               errorText='Please enter a name'
+              minLengthError='name should contain atleast 7 charecters'
+              maxLengthError='name exceeded the limit of 20 charecters'
               onInput={inputHandler}
             />
           )}
@@ -146,8 +156,14 @@ const Auth = () => {
             type='email'
             placeholder='enter email'
             label='Email'
-            validators={[VALIDATOR_EMAIL()]}
-            errorText='please enter a email..'
+            validators={[
+              VALIDATOR_MINLENGTH(15),
+              VALIDATOR_MAXLENGTH(50),
+              VALIDATOR_EMAIL(),
+            ]}
+            errorText='please enter a valid email'
+            minLengthError='email should contain atleast 15 charecters'
+            maxLengthError='email exceeded the limit of 50 charecters'
             onInput={inputHandler}
           />
 
@@ -159,6 +175,8 @@ const Auth = () => {
             label='Password'
             validators={[VALIDATOR_MINLENGTH(7), VALIDATOR_MAXLENGTH(12)]}
             errorText='please enter a password'
+            minLengthError='password should contain atleast 7 charecters'
+            maxLengthError='password exceeded the limit of 12 charecters'
             onInput={inputHandler}
           />
           <Button type='submit' disabled={!formState.isValid}>

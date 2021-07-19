@@ -37,6 +37,10 @@ const UpdatePlace = () => {
   );
 
   useEffect(() => {
+    document.title = "Update Place";
+  });
+
+  useEffect(() => {
     const fetchPlace = async () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`;

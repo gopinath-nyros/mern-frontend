@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 
 import { validate } from "../../util/validators";
 import countries from "../../util/countries.json";
@@ -6,17 +6,12 @@ import "./Input.css";
 
 // reducer function
 const inputReducer = (state, action) => {
-  if (action.type === "CHANGE") {
-    state.strLength = action.val.length;
-  }
-  console.log(state);
   switch (action.type) {
     case "CHANGE":
       return {
         ...state,
         value: action.val,
         isValid: validate(action.val, action.validators),
-        // strLength: action.val.length,
       };
     case "TOUCH":
       return {
@@ -30,32 +25,45 @@ const inputReducer = (state, action) => {
 
 const Input = (props) => {
   // const [countries, setCountries] = useState([]);
-  // const [countriesMatch, setCountriesMatch] = useState([]);
+  const [countriesMatch, setCountriesMatch] = useState([]);
 
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue || "",
     isValid: props.initialValid || false,
     isTouched: false,
-    strLength: 0,
   });
 
   const { id, onInput } = props;
-  const { value, isValid, strLength } = inputState;
+  const { value, isValid } = inputState;
 
   useEffect(() => {
     onInput(id, value, isValid);
-  }, [id, value, isValid, strLength, onInput]);
+  }, [id, value, isValid, onInput]);
+
+  // useEffect(() => {
+  //   if (props.id === "address") {
+  //     console.log("suggesting address...");
+  //     const url = "https://restcountries.eu/rest/v2/all";
+  //     const loadCountries = async () => {
+  //       const response = await fetch(url);
+  //       const data = await response.json();
+  //       console.log(data);
+  //       setCountries(data);
+  //     };
+  //     loadCountries();
+  //   }
+  // }, [props.id]);
 
   const inputChangeHandler = (event) => {
-    // if (props.list) {
-    //   const text = event.target.value.toLowerCase();
-    //   let matches = countries.filter((country) => {
-    //     const regex = new RegExp(`${text}`, "gi");
-    //     return country.name.match(regex) || country.capital.match(regex);
-    //   });
-    //   // setCountriesMatch(matches);
-    //   // console.log(countriesMatch);
-    // }
+    if (props.list) {
+      const text = event.target.value.toLowerCase();
+      let matches = countries.filter((country) => {
+        const regex = new RegExp(`${text}`, "gi");
+        return country.name.match(regex) || country.capital.match(regex);
+      });
+      setCountriesMatch(matches);
+      // console.log(countriesMatch);
+    }
     dispatch({
       type: "CHANGE",
       val: event.target.value,
@@ -96,6 +104,25 @@ const Input = (props) => {
     </datalist>
   );
 
+  // const dataList = (
+  //   <div id='address'>
+  //     {countriesMatch.map((item, index) => (
+  //       <p key={index}>{item.name}</p>
+  //     ))}
+  //   </div>
+  // );
+
+  // let dataList;
+  // if (props.list) {
+  //   dataList = (
+  //     <datalist id='address'>
+  //       {countries.map((item, index) => (
+  //         <option key={index} value={item.name} />
+  //       ))}
+  //     </datalist>
+  //   );
+  // }
+
   return (
     <div
       className={`form-control ${
@@ -104,37 +131,7 @@ const Input = (props) => {
     >
       <label htmlFor={props.id}>{props.label}</label>
       {element}
-      {!inputState.isValid &&
-        inputState.isTouched &&
-        inputState.strLength === 0 && <p>{props.errorText}</p>}
-
-      {!inputState.isValid &&
-        inputState.isTouched &&
-        inputState.strLength > 0 &&
-        inputState.strLength < 7 && <p>{props.minLengthError}</p>}
-
-      {!inputState.isValid &&
-        inputState.isTouched &&
-        inputState.strLength > 0 &&
-        props.type === "email" &&
-        inputState.strLength < 15 && <p>{props.minLengthError}</p>}
-
-      {!inputState.isValid &&
-        inputState.isTouched &&
-        (props.type === "text" || props.type === "password") &&
-        inputState.strLength > 12 && <p>{props.maxLengthError}</p>}
-
-      {!inputState.isValid &&
-        inputState.isTouched &&
-        props.type === "email" &&
-        inputState.strLength > 50 && <p>{props.maxLengthError}</p>}
-      {dataList}
-
-      {inputState.strLength >= 15 &&
-        inputState.strLength <= 50 &&
-        !inputState.isValid &&
-        inputState.isTouched &&
-        props.type === "email" && <p>{"not a valid email"}</p>}
+      {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
       {dataList}
     </div>
   );
