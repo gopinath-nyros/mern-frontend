@@ -122,7 +122,7 @@ const NewPlace = () => {
           list='address'
           validators={[
             VALIDATOR_REQUIRE(),
-            VALIDATOR_MINLENGTH(7),
+            VALIDATOR_MINLENGTH(5),
             VALIDATOR_MAXLENGTH(60),
           ]}
           errorText='please enter address'
