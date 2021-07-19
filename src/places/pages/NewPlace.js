@@ -126,7 +126,7 @@ const NewPlace = () => {
             VALIDATOR_MAXLENGTH(60),
           ]}
           errorText='please enter address'
-          minLengthError='address should contain atleast 7 charecters'
+          minLengthError='address should contain atleast 5 charecters'
           maxLengthError='address exceeded the limit of 60 charecters'
           onInput={inputHandler}
         />
