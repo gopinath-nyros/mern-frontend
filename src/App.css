@@ -1,0 +1,21 @@
+.no-data {
+  margin: 0;
+  text-align: center;
+  padding: 5px;
+  background-color: #f8f7f7;
+  /* animation: message 4s; */
+}
+
+/* @keyframes message {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
+} */
+
+.loader {
+  display: block;
+}

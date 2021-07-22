@@ -9,7 +9,7 @@ const inputReducer = (state, action) => {
   if (action.type === "CHANGE") {
     state.strLength = action.val.length;
   }
-  console.log(state);
+  // console.log(state);
   switch (action.type) {
     case "CHANGE":
       return {
