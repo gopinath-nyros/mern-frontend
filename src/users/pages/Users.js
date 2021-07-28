@@ -9,8 +9,6 @@ const Users = () => {
   const [loadedUsers, getLoadedUsers] = useState();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const authCtx = useContext(AuthContext);
-  // console.log("it is......" + authCtx.username);
-  // console.log("it is......" + authCtx.userId);
   useEffect(() => {
     const getAllUsers = async () => {
       try {

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import Button from "../../shared/components/FormElements/Button";
 
 import Card from "../../shared/components/UIElements/Card";
@@ -8,6 +8,7 @@ import "./PlaceList.css";
 
 const PlaceList = (props) => {
   const authCtx = useContext(AuthContext);
+  const [totalCount, setTotalCount] = useState(props.totalCount);
   const loggedInUser = authCtx.userId;
   // console.log(props);
   if (props.items.length === 0) {
@@ -24,10 +25,16 @@ const PlaceList = (props) => {
     );
   }
 
+  const updateCount = (count) => {
+    console.log("updating count...");
+    setTotalCount(count);
+  };
+
+  console.log(`the total count is ${totalCount}`);
   const greet = (
     <div className='title'>
       <h2 className='greet'>Welcome Back {authCtx.username}</h2>
-      <p>Total number of places created - {props.totalCount}</p>
+      <p>Total number of places created - {totalCount}</p>
     </div>
   );
 
@@ -50,6 +57,7 @@ const PlaceList = (props) => {
             onDelete={props.onDeletePlace}
             creatorName={place.creator.username ? place.creator.username : ""}
             comp={props.comp}
+            updateCount={updateCount}
           />
         ))}
       </ul>

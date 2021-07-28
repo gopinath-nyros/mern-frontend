@@ -1,5 +1,6 @@
 import React, { useState, Fragment, useContext } from "react";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Button from "../../shared/components/FormElements/Button";
 import { AuthContext } from "../../shared/context/auth-context";
 import Card from "../../shared/components/UIElements/Card";
@@ -16,6 +17,7 @@ const PlaceItem = (props) => {
   const authCtx = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const params = useParams();
   const openMapHandler = () => {
     setShowMap(true);
   };
@@ -36,10 +38,12 @@ const PlaceItem = (props) => {
     console.log("deleting...");
     setShowConfirmModal(false);
     try {
-      const url = `${process.env.REACT_APP_BACKEND_URL}/places/${props.id}`;
-      await sendRequest(url, "DELETE", null, {
+      const url = `${process.env.REACT_APP_BACKEND_URL}/places/${props.id}?userID=${params.userId}`;
+      const response = await sendRequest(url, "DELETE", null, {
         Authorization: "Bearer " + authCtx.token,
       });
+      console.log(response);
+      props.updateCount(response.updatedCount);
       props.onDelete(props.id);
     } catch (error) {}
   };
