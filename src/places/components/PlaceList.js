@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import Button from "../../shared/components/FormElements/Button";
 
 import Card from "../../shared/components/UIElements/Card";
@@ -24,22 +24,36 @@ const PlaceList = (props) => {
     );
   }
 
+  const greet = (
+    <div className='title'>
+      <h2 className='greet'>Welcome Back {authCtx.username}</h2>
+      <p>Total number of places created - {props.totalCount}</p>
+    </div>
+  );
+
   return (
-    <ul className='place-list'>
-      {props.items.map((place, index) => (
-        <PlaceItem
-          key={index}
-          id={place.id}
-          image={place.image}
-          title={place.title}
-          description={place.description}
-          address={place.address}
-          creatorId={place.creator}
-          coordinates={place.location}
-          onDelete={props.onDeletePlace}
-        />
-      ))}
-    </ul>
+    <Fragment>
+      {props.comp === "myplaces" && greet}
+      <ul className='place-list'>
+        {props.items.map((place, index) => (
+          <PlaceItem
+            key={index}
+            id={place.id}
+            image={place.image}
+            title={place.title}
+            description={place.description}
+            address={place.address}
+            creatorId={
+              place.creator.username ? place.creator.id : place.creator
+            }
+            coordinates={place.location}
+            onDelete={props.onDeletePlace}
+            creatorName={place.creator.username ? place.creator.username : ""}
+            comp={props.comp}
+          />
+        ))}
+      </ul>
+    </Fragment>
   );
 };
 

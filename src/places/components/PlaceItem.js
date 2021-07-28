@@ -1,4 +1,5 @@
 import React, { useState, Fragment, useContext } from "react";
+import { Link } from "react-router-dom";
 import Button from "../../shared/components/FormElements/Button";
 import { AuthContext } from "../../shared/context/auth-context";
 import Card from "../../shared/components/UIElements/Card";
@@ -10,6 +11,7 @@ import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 const PlaceItem = (props) => {
+  // console.log(`calling comp is ${props.comp}`);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const authCtx = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
@@ -45,6 +47,7 @@ const PlaceItem = (props) => {
   return (
     <Fragment>
       <ErrorModal error={error} clearError={clearError} />
+
       {/* Modal for Map */}
       <Modal
         show={showMap}
@@ -86,19 +89,33 @@ const PlaceItem = (props) => {
             <h2>{props.title}</h2>
             <h3>{props.address}</h3>
             <p>{props.description}</p>
+            <Link
+              className='text-link'
+              to={
+                authCtx.userId === props.creatorId
+                  ? `/${props.creatorId}/myplaces`
+                  : `/${props.creatorId}/places`
+              }
+            >
+              <p>
+                {props.creatorName ? `created by ${props.creatorName}` : ""}
+              </p>
+            </Link>
           </div>
           <div className='place-item__actions'>
             <Button inverse onClick={openMapHandler}>
               View on a Map
             </Button>
-            {authCtx.userId === props.creatorId && (
-              <Button to={`/places/${props.id}`}>Edit</Button>
-            )}
-            {authCtx.userId === props.creatorId && (
-              <Button danger onClick={showDeleteHandler}>
-                Delete
-              </Button>
-            )}
+            {authCtx.userId === props.creatorId &&
+              (props.comp === "myplaces" || props.comp === "userplaces") && (
+                <Button to={`/places/${props.id}`}>Edit</Button>
+              )}
+            {authCtx.userId === props.creatorId &&
+              (props.comp === "myplaces" || props.comp === "userplaces") && (
+                <Button danger onClick={showDeleteHandler}>
+                  Delete
+                </Button>
+              )}
           </div>
         </Card>
       </li>

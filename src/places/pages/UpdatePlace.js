@@ -100,7 +100,7 @@ const UpdatePlace = () => {
           Authorization: "Bearer " + authCtx.token,
         }
       );
-      history.push("/" + authCtx.userId + "/places");
+      history.push("/" + authCtx.userId + "/myplaces");
     } catch (err) {}
   };
 

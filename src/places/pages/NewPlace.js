@@ -62,7 +62,7 @@ const NewPlace = () => {
       });
 
       // Redirect here on success
-      history.push("/");
+      history.push(`/${authCtx.userId}/myplaces`);
     } catch (error) {}
   };
 
@@ -117,7 +117,7 @@ const NewPlace = () => {
           id='address'
           element='input'
           type='text'
-          placeholder='enter address'
+          placeholder='select country or enter address'
           label='Address'
           list='address'
           validators={[

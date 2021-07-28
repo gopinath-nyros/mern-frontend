@@ -19,10 +19,11 @@ const override = css`
   border-color: red;
 `;
 
-const UserPlaces = () => {
+const MyPlaces = () => {
   const authCtx = useContext(AuthContext);
   const loggedInUser = authCtx.userId;
   const [loadedPlaces, setLoadedPlaces] = useState([]);
+  const [totalPlaceCount, setTotalPlaceCount] = useState(0);
   const [page, setPage] = useState(1);
   const [noPlaces, setNoPlaces] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -34,13 +35,15 @@ const UserPlaces = () => {
   });
 
   useEffect(() => {
-    console.log("USE EFFECT TRIGGER...");
     const getPlaces = async () => {
       console.log(id);
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}?page=${page}&size=3`;
         const responseData = await sendRequest(url);
         console.log(responseData);
+        if (responseData.count) {
+          setTotalPlaceCount(responseData.count);
+        }
         if (responseData.places) {
           setLoadedPlaces((prev) => [...prev, ...responseData.places]);
         } else {
@@ -93,16 +96,17 @@ const UserPlaces = () => {
       setPage(page + 1);
     }
   };
-
+  console.log(loadedPlaces);
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       {loadedPlaces.length > 0 && (
         <PlaceList
+          totalCount={totalPlaceCount}
           items={loadedPlaces}
           onDeletePlace={placeDeletedHandler}
-          comp='userplaces'
+          comp='myplaces'
         />
       )}
       {isLoading && loadedPlaces.length > 0 && (
@@ -113,4 +117,4 @@ const UserPlaces = () => {
   );
 };
 
-export default UserPlaces;
+export default MyPlaces;

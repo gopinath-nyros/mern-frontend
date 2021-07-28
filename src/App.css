@@ -6,6 +6,24 @@
   /* animation: message 4s; */
 }
 
+.title {
+  text-align: center;
+}
+
+.text-link {
+  color: #ff0055;
+  text-decoration: inherit;
+  font-weight: 500;
+}
+
+.text-link:hover {
+  color: #e9145b;
+}
+
+.greet {
+  font-weight: 500;
+}
+
 /* @keyframes message {
   from {
     opacity: 1;
