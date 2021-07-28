@@ -96,7 +96,14 @@ const MyPlaces = () => {
       setPage(page + 1);
     }
   };
-  console.log(loadedPlaces);
+  document.body.ontouchmove = function () {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      setPage(page + 1);
+    }
+  };
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
