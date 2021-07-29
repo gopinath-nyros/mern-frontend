@@ -24,6 +24,7 @@ const MyPlaces = () => {
   const loggedInUser = authCtx.userId;
   const [loadedPlaces, setLoadedPlaces] = useState([]);
   const [totalPlaceCount, setTotalPlaceCount] = useState(0);
+  const [triggerCount, setTriggerCount] = useState(0);
   const [page, setPage] = useState(1);
   const [noPlaces, setNoPlaces] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -89,21 +90,18 @@ const MyPlaces = () => {
   }
 
   window.onscroll = function () {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      setPage(page + 1);
+    if (noPlaces) {
+      return;
+    }
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      setTriggerCount(triggerCount + 1);
+      if (triggerCount === 1) {
+        setTriggerCount(0);
+        setPage(page + 1);
+      }
     }
   };
-  document.body.ontouchmove = function () {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      setPage(page + 1);
-    }
-  };
+
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />

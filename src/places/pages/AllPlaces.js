@@ -4,12 +4,23 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import PlaceList from "../components/PlaceList";
 import "../../App.css";
 
+import { BeatLoader } from "react-spinners";
+import { css } from "@emotion/react";
+
+const override = css`
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
+
 const AllPlaces = () => {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
   const { isLoading, sendRequest } = useHttpClient();
   const [page, setPage] = useState(1);
   const [noPlaces, setNoPlaces] = useState(false);
   const [show, setShow] = useState();
+  const [triggerCount, setTriggerCount] = useState(0);
   useEffect(() => {
     console.log("USEEFFECT TRIGGER");
     const getAllPlaces = async () => {
@@ -42,11 +53,15 @@ const AllPlaces = () => {
   };
 
   window.onscroll = function () {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      setPage(page + 1);
+    if (noPlaces) {
+      return;
+    }
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      setTriggerCount(triggerCount + 1);
+      if (triggerCount === 1) {
+        setTriggerCount(0);
+        setPage(page + 1);
+      }
     }
   };
 
@@ -60,6 +75,9 @@ const AllPlaces = () => {
           onDeletePlace={placeDeletedHandler}
           comp='allplaces'
         />
+      )}
+      {isLoading && loadedPlaces.length > 0 && (
+        <BeatLoader css={override} loading />
       )}
       {noPlaces && <p className='no-data'>{show}</p>}
     </Fragment>

@@ -26,11 +26,9 @@ const PlaceList = (props) => {
   }
 
   const updateCount = (count) => {
-    console.log("updating count...");
     setTotalCount(count);
   };
 
-  console.log(`the total count is ${totalCount}`);
   const greet = (
     <div className='title'>
       <h2 className='greet'>Welcome Back {authCtx.username}</h2>

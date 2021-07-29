@@ -23,6 +23,7 @@ const UserPlaces = () => {
   const authCtx = useContext(AuthContext);
   const loggedInUser = authCtx.userId;
   const [loadedPlaces, setLoadedPlaces] = useState([]);
+  const [triggerCount, setTriggerCount] = useState(0);
   const [page, setPage] = useState(1);
   const [noPlaces, setNoPlaces] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -34,7 +35,6 @@ const UserPlaces = () => {
   });
 
   useEffect(() => {
-    console.log("USE EFFECT TRIGGER...");
     const getPlaces = async () => {
       console.log(id);
       try {
@@ -86,11 +86,15 @@ const UserPlaces = () => {
   }
 
   window.onscroll = function () {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      setPage(page + 1);
+    if (noPlaces) {
+      return;
+    }
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      setTriggerCount(triggerCount + 1);
+      if (triggerCount === 1) {
+        setTriggerCount(0);
+        setPage(page + 1);
+      }
     }
   };
 
