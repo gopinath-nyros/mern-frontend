@@ -8,17 +8,15 @@ const BreadCrumb = () => {
     // console.log(`pathname is ${pathname}`);
     const getPathNames = (names) => {
       const pathNames = names.split("/").filter((item) => {
-        // console.log(`item is ${item}`);
         if (item.length > 20) {
           return false;
         }
         return item;
       });
+      console.log(pathNames);
       return pathNames;
     };
-    // const pathnames = pathname.split("/").filter((item) => item);
     const pathnames = getPathNames(pathname);
-    // console.log(pathnames);
     const capatilize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
     return (
       <div className='bcrumb'>
@@ -31,6 +29,9 @@ const BreadCrumb = () => {
             <span></span>
           )}
           {pathnames.map((name, index) => {
+            if (name === "auth") {
+              name = "login";
+            }
             const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
             const isLast = index === pathnames.length - 1;
             return isLast ? (

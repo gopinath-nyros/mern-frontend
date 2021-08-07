@@ -50,8 +50,6 @@ const AllPlaces = () => {
   };
 
   window.onscroll = function () {
-    console.log(`WIH + WSY - ${window.innerHeight + window.scrollY}`);
-    console.log(`D.B.OSH - ${document.body.offsetHeight}`);
     if (noPlaces) {
       return;
     }
