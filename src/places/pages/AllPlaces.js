@@ -22,13 +22,10 @@ const AllPlaces = () => {
   const [show, setShow] = useState();
   const [triggerCount, setTriggerCount] = useState(0);
   useEffect(() => {
-    console.log("USEEFFECT TRIGGER");
     const getAllPlaces = async () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/places/allplaces?page=${page}&size=5`;
         const responseData = await sendRequest(url);
-        console.log(responseData);
-        console.log(responseData.places.length);
         if (responseData.places && responseData.places.length > 0) {
           setLoadedPlaces((prev) => [...prev, ...responseData.places]);
         } else {
@@ -53,10 +50,13 @@ const AllPlaces = () => {
   };
 
   window.onscroll = function () {
+    console.log(`WIH + WSY - ${window.innerHeight + window.scrollY}`);
+    console.log(`D.B.OSH - ${document.body.offsetHeight}`);
     if (noPlaces) {
       return;
     }
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      console.log("EQUAL");
       setTriggerCount(triggerCount + 1);
       if (triggerCount === 1) {
         setTriggerCount(0);

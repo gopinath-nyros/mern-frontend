@@ -37,11 +37,9 @@ const MyPlaces = () => {
 
   useEffect(() => {
     const getPlaces = async () => {
-      console.log(id);
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}?page=${page}&size=3`;
         const responseData = await sendRequest(url);
-        console.log(responseData);
         if (responseData.count) {
           setTotalPlaceCount(responseData.count);
         }

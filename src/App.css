@@ -24,16 +24,6 @@
   font-weight: 500;
 }
 
-/* @keyframes message {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    display: none;
-  }
-} */
-
 .loader {
   display: block;
 }

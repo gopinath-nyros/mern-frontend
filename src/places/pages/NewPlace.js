@@ -70,9 +70,18 @@ const NewPlace = () => {
     document.title = "New Place";
   });
 
+  if (error) {
+    console.log("the error is");
+    console.log(error);
+  }
+
   return (
     <Fragment>
-      <ErrorModal error={error} onClear={clearError} />
+      <ErrorModal
+        error={error}
+        onClear={clearError}
+        headerMessage={"Invalid address"}
+      />
       <form className='place-form' onSubmit={formSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
         <Input

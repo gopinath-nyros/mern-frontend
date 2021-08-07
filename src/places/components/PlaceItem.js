@@ -51,7 +51,6 @@ const PlaceItem = (props) => {
   return (
     <Fragment>
       <ErrorModal error={error} clearError={clearError} />
-
       {/* Modal for Map */}
       <Modal
         show={showMap}

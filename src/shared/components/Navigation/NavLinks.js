@@ -13,12 +13,6 @@ const NavLinks = (props) => {
           ALL PLACES
         </NavLink>
       </li>
-      {/* <li>
-        <NavLink to='/' exact>
-          ALL USERS
-        </NavLink>
-      </li> */}
-
       {authCtx.isLoggedIn && (
         <li>
           <NavLink to={`/${authCtx.userId}/myplaces`}>MY PLACES</NavLink>

@@ -9,6 +9,7 @@ import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
+  VALIDATOR_MAXLENGTH,
 } from "../../shared/util/validators";
 import "./Place.css";
 import { useForm } from "../../shared/hooks/form-hook";
@@ -45,6 +46,7 @@ const UpdatePlace = () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`;
         const responseData = await sendRequest(url);
+        console.log(responseData);
         setLoadedPlace(responseData.place);
         setFormData(
           {
@@ -59,7 +61,9 @@ const UpdatePlace = () => {
           },
           true
         );
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchPlace();
   }, [sendRequest, placeId, setFormData]);
@@ -114,8 +118,14 @@ const UpdatePlace = () => {
             element='input'
             type='text'
             label='Title'
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText='please enter a valid title'
+            validators={[
+              VALIDATOR_REQUIRE(),
+              VALIDATOR_MINLENGTH(7),
+              VALIDATOR_MAXLENGTH(12),
+            ]}
+            errorText='please enter a title'
+            minLengthError='title should contain atleast 7 charecters'
+            maxLengthError='title exceeded the limit of 12 charecters'
             onInput={inputHandler}
             initialValue={loadedPlace.title}
             initialValid={true}
@@ -126,8 +136,14 @@ const UpdatePlace = () => {
             element='textarea'
             type='text'
             label='Description'
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText='please enter a valid description'
+            validators={[
+              VALIDATOR_REQUIRE(),
+              VALIDATOR_MINLENGTH(7),
+              VALIDATOR_MAXLENGTH(150),
+            ]}
+            errorText='please enter a description'
+            minLengthError='description should contain atleast 7 charecters'
+            maxLengthError='description exceeded the limit of 150 charecters'
             onInput={inputHandler}
             initialValue={loadedPlace.description}
             initialValid={true}

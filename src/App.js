@@ -11,6 +11,7 @@ import LoadingSpinner from "./shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import AllPlaces from "./places/pages/AllPlaces";
+import BreadCrumb from "./BreadCrumb";
 
 // implement lazy loading
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
@@ -22,45 +23,31 @@ const Auth = React.lazy(() => import("./users/pages/Auth"));
 const App = () => {
   const { token, login, logout, userId, username } = useAuth();
   let routes;
-
   if (token) {
     routes = (
-      <Switch>
-        <Route path='/' exact>
-          <AllPlaces />
-        </Route>
-        <Route path='/:userId/places' exact>
-          <UserPlaces />
-        </Route>
-        <Route path='/:userId/myplaces' exact>
-          <MyPlaces />
-        </Route>
-        <Route path='/places/new' exact>
-          <NewPlace />
-        </Route>
-        <Route path='/places/:placeId' exact>
-          <UpdatePlace />
-        </Route>
-        <Redirect to='/' />
-      </Switch>
+      <div>
+        <Switch>
+          <Route path='/' exact component={AllPlaces} />
+          <Route path='/:userId/places' exact component={UserPlaces} />
+          <Route path='/:userId/myplaces' exact component={MyPlaces} />
+          <Route path='/places/new' exact component={NewPlace} />
+          <Route path='/places/:placeId' exact component={UpdatePlace} />
+          <Redirect to='/' />
+        </Switch>
+      </div>
     );
   } else {
     routes = (
-      <Switch>
-        <Route path='/' exact>
-          <AllPlaces />
-        </Route>
-        <Route path='/:userId/places' exact>
-          <UserPlaces />
-        </Route>
-        <Route path='/auth'>
-          <Auth />
-        </Route>
-        <Redirect to='/auth' />
-      </Switch>
+      <div>
+        <Switch>
+          <Route path='/' exact component={AllPlaces} />
+          <Route path='/:userId/places' exact component={UserPlaces} />
+          <Route path='/auth' component={Auth} />
+          <Redirect to='/auth' />
+        </Switch>
+      </div>
     );
   }
-
   return (
     <AuthContext.Provider
       value={{
@@ -72,20 +59,25 @@ const App = () => {
         logout: logout,
       }}
     >
-      <Router>
-        <MainNavigation />
-        <main>
-          <Suspense
-            fallback={
-              <div className='center'>
-                <LoadingSpinner />
-              </div>
-            }
-          >
-            {routes}
-          </Suspense>
-        </main>
-      </Router>
+      <div className='App'>
+        <Router>
+          <Router>
+            <MainNavigation />
+            <main>
+              <Suspense
+                fallback={
+                  <div className='center'>
+                    <LoadingSpinner />
+                  </div>
+                }
+              >
+                <BreadCrumb />
+                {routes}
+              </Suspense>
+            </main>
+          </Router>
+        </Router>
+      </div>
     </AuthContext.Provider>
   );
 };
